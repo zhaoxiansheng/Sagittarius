@@ -3,6 +3,7 @@ package com.example.zy.sagittarius;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.zy.sagittarius.bean.Constants;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.WbSdk;

@@ -1,4 +1,4 @@
-package com.example.zy.sagittarius;
+package com.example.zy.sagittarius.bean;
 
 /**
  * 定义授权时候的参数

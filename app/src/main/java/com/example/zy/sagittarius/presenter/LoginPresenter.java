@@ -48,6 +48,6 @@ public class LoginPresenter implements ILoginPresenter {
   }
 
   private void initUser() {
-    user = new UserModel("15663416324", "zhaoyu");
+    user = new UserModel("111111", "111111");
   }
 }

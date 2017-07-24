@@ -4,4 +4,5 @@
     <string name="password_hint">请输入密码</string>
     <string name="login">登录</string>
     <string name="sign_in">注册</string>
+    <string name="draw_layout">抽屉</string>
 </resources>

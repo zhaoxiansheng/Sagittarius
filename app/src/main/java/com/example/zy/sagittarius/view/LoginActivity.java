@@ -1,17 +1,18 @@
 package com.example.zy.sagittarius.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.presenter.ILoginPresenter;
 import com.example.zy.sagittarius.presenter.LoginPresenter;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
   private ProgressBar progressBar;
   private TextInputLayout userWrapper;
   private TextInputLayout passwordWrapper;
+  private SharedPreferences sharedPreferences;
+  private SharedPreferences.Editor editor;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,6 +49,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
     userWrapper = (TextInputLayout) findViewById(R.id.username_wrapper);
     passwordWrapper = (TextInputLayout) findViewById(R.id.password_wrapper);
+
+    sharedPreferences = getSharedPreferences("login", Activity.MODE_PRIVATE);
+    editor = sharedPreferences.edit();
   }
 
   @Override public void onHideKeyboard() {
@@ -83,7 +89,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     btnLogin.setEnabled(true);
     btnClear.setEnabled(true);
     if (result) {
-      startActivity(new Intent(this, WelComeActivity.class));
+      editor.putString("name", editUser.getText().toString());
+      editor.putString("pass", editUser.getText().toString());
+      editor.commit();
+      startActivity(new Intent(this, HomeActivity.class));
       userWrapper.setErrorEnabled(false);
       passwordWrapper.setErrorEnabled(false);
     } else {

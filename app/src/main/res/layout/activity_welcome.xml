@@ -6,7 +6,8 @@
     <ImageView
         android:id="@+id/welcome_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/timer_text"
