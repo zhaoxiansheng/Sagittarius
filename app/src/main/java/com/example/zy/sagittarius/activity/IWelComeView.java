@@ -1,5 +1,6 @@
-package com.example.zy.sagittarius.view;
+package com.example.zy.sagittarius.activity;
 
+import android.content.Context;
 import java.util.Timer;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Timer;
  */
 
 public interface IWelComeView {
-    void getBingImage(String bingPic);
+    void getBingImage(Context context,String bingPic);
     void timerToHome(int time);
     void timerCancel(Timer timer);
 }

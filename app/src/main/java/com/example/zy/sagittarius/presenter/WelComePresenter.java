@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.example.zy.sagittarius.utils.HttpUtils;
-import com.example.zy.sagittarius.view.IWelComeView;
+import com.example.zy.sagittarius.activity.IWelComeView;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,7 +13,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * Created by ZY on 2017/6/23.
+ * Created ZY on 2017/6/23.
  */
 
 public class WelComePresenter implements IWelComePresenter{
@@ -31,7 +31,7 @@ public class WelComePresenter implements IWelComePresenter{
     @Override
     public void getBingImg() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtils.sendOkHttpRequest(requestBingPic, new Callback() {
+        HttpUtils.sendOkHttpRequest(requestBingPic, "getBingImg", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
@@ -44,7 +44,7 @@ public class WelComePresenter implements IWelComePresenter{
                         context).edit();
                 editor.putString("bing_pic", bingPic);
                 editor.apply();
-                iWelComeView.getBingImage(bingPic);
+                iWelComeView.getBingImage(context, bingPic);
             }
         });
     }

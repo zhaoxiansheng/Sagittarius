@@ -1,4 +1,4 @@
-package com.example.zy.sagittarius.view;
+package com.example.zy.sagittarius.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
       startActivity(new Intent(this, HomeActivity.class));
       userWrapper.setErrorEnabled(false);
       passwordWrapper.setErrorEnabled(false);
+      finish();
     } else {
       switch (code) {
         case -1:

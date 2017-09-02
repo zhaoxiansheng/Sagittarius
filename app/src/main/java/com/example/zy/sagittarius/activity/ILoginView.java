@@ -1,4 +1,4 @@
-package com.example.zy.sagittarius.view;
+package com.example.zy.sagittarius.activity;
 
 /**
  * Created by ZY on 2017/6/11.

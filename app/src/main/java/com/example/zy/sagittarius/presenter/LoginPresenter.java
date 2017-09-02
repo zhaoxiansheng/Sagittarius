@@ -5,7 +5,7 @@ import android.os.Looper;
 
 import com.example.zy.sagittarius.model.IUser;
 import com.example.zy.sagittarius.model.UserModel;
-import com.example.zy.sagittarius.view.ILoginView;
+import com.example.zy.sagittarius.activity.ILoginView;
 
 /**
  * Created by ZY on 2017/6/11.

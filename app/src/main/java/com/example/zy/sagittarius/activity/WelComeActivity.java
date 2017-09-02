@@ -1,5 +1,6 @@
-package com.example.zy.sagittarius.view;
+package com.example.zy.sagittarius.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,23 +49,27 @@ public class WelComeActivity extends AppCompatActivity
     switch (v.getId()) {
       case R.id.timer_text:
         welComePresenter.cancel();
-        if (name != null && pass != null){
+        if (name != null && pass != null) {
           Intent intent = new Intent(WelComeActivity.this, HomeActivity.class);
           startActivity(intent);
+          finish();
         } else {
           Intent intent = new Intent(WelComeActivity.this, LoginActivity.class);
           startActivity(intent);
+          finish();
         }
         break;
     }
   }
 
-  @Override public void getBingImage(final String bingPic) {
-    runOnUiThread(new Runnable() {
-      @Override public void run() {
-        Glide.with(WelComeActivity.this).load(bingPic).into(welcomeImg);
-      }
-    });
+  @Override public void getBingImage(Context context, final String bingPic) {
+    if (context != null){
+      runOnUiThread(new Runnable() {
+        @Override public void run() {
+          Glide.with(WelComeActivity.this).load(bingPic).into(welcomeImg);
+        }
+      });
+    }
   }
 
   @Override public void timerToHome(final int time) {
@@ -73,12 +78,14 @@ public class WelComeActivity extends AppCompatActivity
         timerText.setText("跳过(" + time + ")");
         if (time == 0) {
           welComePresenter.cancel();
-          if (name != null && pass != null){
+          if (name != null && pass != null) {
             Intent intent = new Intent(WelComeActivity.this, HomeActivity.class);
             startActivity(intent);
+            finish();
           } else {
             Intent intent = new Intent(WelComeActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
           }
         }
       }

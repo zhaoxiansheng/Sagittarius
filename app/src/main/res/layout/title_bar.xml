@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<LinearLayout
+    android:id="@+id/ll_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorPrimary"
-    android:id="@+id/toolbar"
-    android:layout_height="?attr/actionBarSize"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:orientation="vertical"
+    tools:context=".activity.HomeActivity"
     >
-</android.support.v7.widget.Toolbar>
+
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:background="?attr/colorPrimary"
+      android:layout_height="?attr/actionBarSize"
+      android:layout_width="match_parent"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      >
+  </android.support.v7.widget.Toolbar>
+
+  <com.example.zy.sagittarius.view.StretchableFloatingButton
+      android:id="@+id/view_stretchable_floating_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      >
+  </com.example.zy.sagittarius.view.StretchableFloatingButton>
+
+</LinearLayout>

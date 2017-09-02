@@ -6,6 +6,7 @@
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
   <!-- 用于调用 JNI -->
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -17,7 +18,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".view.WelComeActivity">
+    <activity android:name=".activity.WelComeActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
@@ -25,9 +26,9 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".view.HomeActivity">
+    <activity android:name=".activity.HomeActivity">
     </activity>
-    <activity android:name=".view.LoginActivity">
+    <activity android:name=".activity.LoginActivity">
     </activity>
   </application>
 
