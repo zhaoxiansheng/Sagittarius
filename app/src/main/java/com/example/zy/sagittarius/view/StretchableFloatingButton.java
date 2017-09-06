@@ -1,6 +1,7 @@
 package com.example.zy.sagittarius.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +14,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.zy.sagittarius.R;
 
 /**
  * Created by ZY on 2017/8/31.
@@ -27,13 +30,7 @@ public class StretchableFloatingButton extends ViewGroup {
   private int width;
   private int height;
   //开始圆的画笔
-  private Paint startCirclePaint;
-  //结束圆的画笔
-  private Paint endCirclePaint;
-  //中间矩形的画笔
-  private Paint middleRectPaint;
-  //小圆的画笔
-  private Paint smallCirclePaint;
+  private Paint mPaint;
   //中间矩形
   private RectF middleRect;
   //开始圆的配置
@@ -59,6 +56,21 @@ public class StretchableFloatingButton extends ViewGroup {
   //文本可以伸缩的长度
   private int tx;
   private int tx_x;
+
+  //控件背景颜色
+  private int bgColor;
+  //内圈小圆颜色
+  private int innerCircleColor;
+  //字体颜色
+  private int textColor;
+  //文字
+  private String text;
+  //字体大小
+  private float textSize;
+  //速度增减
+  private float speed;
+  //旋转角度
+  private float degrees;
 
   private Handler mHandler = new Handler(new Handler.Callback() {
     @Override public boolean handleMessage(Message msg) {
@@ -102,47 +114,43 @@ public class StretchableFloatingButton extends ViewGroup {
     }
   });
 
-  private void initUtils(Context context) {
+  private void initAttrs(Context context, AttributeSet attrs){
     startCenter = new Point();
     endCenter = new Point();
     smallCenter = new Point();
 
-    startCirclePaint = new Paint();
-    startCirclePaint.setAntiAlias(true);
-    startCirclePaint.setColor(Color.YELLOW);
+    TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StretchableFloatingButton);
+    bgColor = typedArray.getColor(R.styleable.StretchableFloatingButton_bac_color, Color.YELLOW);
+    innerCircleColor = typedArray.getColor(R.styleable.StretchableFloatingButton_inner_circle_color, Color.BLACK);
+    textColor = typedArray.getColor(R.styleable.StretchableFloatingButton_text_color, Color.BLACK);
+    textSize = typedArray.getFloat(R.styleable.StretchableFloatingButton_text_size, 20);
+    text = typedArray.getString(R.styleable.StretchableFloatingButton_text);
+    speed = typedArray.getFloat(R.styleable.StretchableFloatingButton_speed, 80);
+    degrees = typedArray.getFloat(R.styleable.StretchableFloatingButton_degrees, 90);
+    typedArray.recycle();
 
-    endCirclePaint = new Paint();
-    endCirclePaint.setAntiAlias(true);
-    endCirclePaint.setColor(Color.YELLOW);
-
-    smallCirclePaint = new Paint();
-    smallCirclePaint.setAntiAlias(true);//防锯齿
-    smallCirclePaint.setColor(Color.BLACK);
-
-    middleRectPaint = new Paint();
-    middleRectPaint.setAntiAlias(true);
-    middleRectPaint.setColor(Color.YELLOW);
+    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    mPaint.setColor(Color.WHITE);
 
     tvContent = new TextView(context);
-    tvContent.setText("麻烦死了");
-    tvContent.setTextColor(Color.GRAY);
-    tvContent.setTextSize(16);
+    tvContent.setText(text);
+    tvContent.setTextColor(textColor);
+    tvContent.setTextSize(textSize);
     addView(tvContent);
   }
 
   public StretchableFloatingButton(Context context) {
     super(context, null);
-    initUtils(context);
   }
 
   public StretchableFloatingButton(Context context, AttributeSet attrs) {
     super(context, attrs, 0);
-    initUtils(context);
+    initAttrs(context, attrs);
   }
 
   public StretchableFloatingButton(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    initUtils(context);
+    initAttrs(context, attrs);
   }
 
   @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -152,6 +160,7 @@ public class StretchableFloatingButton extends ViewGroup {
 
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     if (width == 0) {
+      // TODO: 2017/9/6 目前还有问题 测量不准确
       //width = MeasureSpec.getSize(widthMeasureSpec);
       //height = MeasureSpec.getSize(heightMeasureSpec);
       width = 600;
@@ -179,14 +188,16 @@ public class StretchableFloatingButton extends ViewGroup {
   }
 
   @Override protected void dispatchDraw(Canvas canvas) {
-    canvas.drawCircle(startCenter.x, startCenter.y, startCircleRadius, startCirclePaint);
+    mPaint.setColor(Color.WHITE);
+    canvas.drawCircle(startCenter.x, startCenter.y, startCircleRadius, mPaint);
 
     middleRect = new RectF(startCenter.x, 0, endCenter.x, height);
-    canvas.drawRect(middleRect, middleRectPaint);
+    canvas.drawRect(middleRect, mPaint);
 
-    canvas.drawCircle(endCenter.x, endCenter.y, endCircleRadius, endCirclePaint);
+    canvas.drawCircle(endCenter.x, endCenter.y, endCircleRadius, mPaint);
 
-    canvas.drawCircle(smallCenter.x, smallCenter.y, smallCircleRadius, smallCirclePaint);
+    mPaint.setColor(Color.BLACK);
+    canvas.drawCircle(smallCenter.x, smallCenter.y, smallCircleRadius, mPaint);
     super.dispatchDraw(canvas);
   }
 

@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".activity.HomeActivity"
     >
@@ -24,6 +25,12 @@
       android:id="@+id/view_stretchable_floating_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      app:text="@string/app_name"
+      app:speed="60"
+      app:text_color="@color/black"
+      app:text_size="16"
+      app:bac_color="@color/yellow"
+      app:inner_circle_color="@color/black"
       >
   </com.example.zy.sagittarius.view.StretchableFloatingButton>
 
