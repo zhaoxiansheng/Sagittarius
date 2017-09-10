@@ -3,27 +3,31 @@ package com.example.zy.sagittarius.presenter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import com.example.zy.sagittarius.utils.HttpUtils;
 import com.example.zy.sagittarius.activity.IWelComeView;
+
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * Created ZY on 2017/6/23.
+ * @author zhaoy
+ *         Created ZY on 2017/6/23.
  */
 
-public class WelComePresenter implements IWelComePresenter{
+public class WelComePresenter implements IWelComePresenter {
 
     private IWelComeView iWelComeView;
     private Timer timer;
     private int timerTime;
     private Context context;
 
-    public WelComePresenter(Context context,IWelComeView iWelComeView){
+    public WelComePresenter(Context context, IWelComeView iWelComeView) {
         this.iWelComeView = iWelComeView;
         this.context = context;
     }
@@ -44,7 +48,7 @@ public class WelComePresenter implements IWelComePresenter{
                         context).edit();
                 editor.putString("bing_pic", bingPic);
                 editor.apply();
-                iWelComeView.getBingImage(context, bingPic);
+                iWelComeView.getBingImage(bingPic);
             }
         });
     }
