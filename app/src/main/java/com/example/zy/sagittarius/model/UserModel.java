@@ -2,11 +2,13 @@ package com.example.zy.sagittarius.model;
 
 /**
  * Created by ZY on 2017/6/11.
+ * user实体类
  */
 
 public class UserModel implements IUser {
-    String name;
-    String passwd;
+
+    private String name;
+    private String passwd;
 
     public UserModel(String name, String passwd) {
         this.name = name;

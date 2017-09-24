@@ -1,6 +1,5 @@
 package com.example.zy.sagittarius.activity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,12 +53,10 @@ public class WelComeActivity extends AppCompatActivity
             case R.id.timer_text:
                 welComePresenter.cancel();
                 if (name != null && pass != null) {
-                    Intent intent = new Intent(WelComeActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                    HomeActivity.activityIntent(WelComeActivity.this);
                     finish();
                 } else {
-                    Intent intent = new Intent(WelComeActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    LoginActivity.activityIntent(WelComeActivity.this);
                     finish();
                 }
                 break;
@@ -68,7 +65,7 @@ public class WelComeActivity extends AppCompatActivity
 
     @Override
     public void getBingImage(final String bingPic) {
-        if (welcomeImg != null){
+        if (welcomeImg != null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -87,12 +84,10 @@ public class WelComeActivity extends AppCompatActivity
                 if (time == 0) {
                     welComePresenter.cancel();
                     if (name != null && pass != null) {
-                        Intent intent = new Intent(WelComeActivity.this, HomeActivity.class);
-                        startActivity(intent);
+                        HomeActivity.activityIntent(WelComeActivity.this);
                         finish();
                     } else {
-                        Intent intent = new Intent(WelComeActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        LoginActivity.activityIntent(WelComeActivity.this);
                         finish();
                     }
                 }

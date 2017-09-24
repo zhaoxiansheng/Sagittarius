@@ -74,7 +74,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
             e.printStackTrace();
         }
         android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);
+        System.exit(0);
     }
 
     /**

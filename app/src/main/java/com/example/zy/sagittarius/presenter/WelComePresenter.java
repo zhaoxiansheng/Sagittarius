@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.zy.sagittarius.utils.HttpUtils;
+import com.example.zy.sagittarius.net.HttpControl;
 import com.example.zy.sagittarius.activity.IWelComeView;
+import com.example.zy.sagittarius.net.RetrofitFactory;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -35,7 +36,7 @@ public class WelComePresenter implements IWelComePresenter {
     @Override
     public void getBingImg() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtils.sendOkHttpRequest(requestBingPic, "getBingImg", new Callback() {
+        HttpControl.sendOkHttpRequest(requestBingPic, "getBingImg", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();

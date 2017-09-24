@@ -210,7 +210,7 @@ public class StretchableFloatingButton extends ViewGroup {
             //文本伸缩比
             tx_x = (float) (tvWidth + 10) / (float) (width - endCircleRadius * 2);
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(width, height);
     }
 
     @Override

@@ -1,18 +1,24 @@
 package com.example.zy.sagittarius.activity;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.presenter.ILoginPresenter;
 import com.example.zy.sagittarius.presenter.LoginPresenter;
@@ -32,6 +38,11 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+      Transition explode = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
+      getWindow().setEnterTransition(explode);
+    }
     setContentView(R.layout.activity_login);
 
     //find view
@@ -92,9 +103,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
       editor.putString("name", editUser.getText().toString());
       editor.putString("pass", editUser.getText().toString());
       editor.commit();
-      startActivity(new Intent(this, HomeActivity.class));
       userWrapper.setErrorEnabled(false);
       passwordWrapper.setErrorEnabled(false);
+      HomeActivity.activityIntent(LoginActivity.this);
       finish();
     } else {
       switch (code) {
@@ -113,5 +124,14 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
   @Override public void onSetProgressBarVisibility(int visibility) {
     progressBar.setVisibility(visibility);
+  }
+
+  public static void activityIntent(Activity activity){
+    Intent intent = new Intent(activity, LoginActivity.class);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+    } else {
+      activity.startActivity(intent);
+    }
   }
 }
