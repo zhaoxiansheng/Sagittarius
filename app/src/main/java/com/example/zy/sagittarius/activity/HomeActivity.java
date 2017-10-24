@@ -195,7 +195,7 @@ public class HomeActivity extends AppCompatActivity
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        Drawable drawable = new BitmapDrawable(resource);
+                        BitmapDrawable drawable = new BitmapDrawable(getResources(),resource);
                         mNavigationView.getHeaderView(0).setBackground(drawable);
                     }
                 });

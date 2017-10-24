@@ -3,8 +3,10 @@ package com.example.zy.sagittarius.utils;
 import java.util.regex.Pattern;
 
 /**
- * Created by zhaoy on 2017/6/22.
+ * Created on 2017/6/22.
  * 校验器:利用正则表达式校验邮箱、手机号等
+ *
+ * @author zhaoy
  */
 
 public class CheckOutUtils {
@@ -50,6 +52,7 @@ public class CheckOutUtils {
 
     /**
      * 校验用户名
+     *
      * @param username
      * @return 校验通过返回true，否则返回false
      */
@@ -59,6 +62,7 @@ public class CheckOutUtils {
 
     /**
      * 校验密码
+     *
      * @param password
      * @return 校验通过返回true，否则返回false
      */
@@ -68,6 +72,7 @@ public class CheckOutUtils {
 
     /**
      * 校验手机号
+     *
      * @param mobile
      * @return 校验通过返回true，否则返回false
      */
@@ -77,6 +82,7 @@ public class CheckOutUtils {
 
     /**
      * 校验邮箱
+     *
      * @param email
      * @return 校验通过返回true，否则返回false
      */
@@ -86,6 +92,7 @@ public class CheckOutUtils {
 
     /**
      * 校验汉字
+     *
      * @param chinese
      * @return 校验通过返回true，否则返回false
      */
@@ -95,6 +102,7 @@ public class CheckOutUtils {
 
     /**
      * 校验身份证
+     *
      * @param idCard
      * @return 校验通过返回true，否则返回false
      */
@@ -104,6 +112,7 @@ public class CheckOutUtils {
 
     /**
      * 校验URL
+     *
      * @param url
      * @return 校验通过返回true，否则返回false
      */
@@ -113,6 +122,7 @@ public class CheckOutUtils {
 
     /**
      * 校验IP地址
+     *
      * @param ipAddress
      * @return
      */

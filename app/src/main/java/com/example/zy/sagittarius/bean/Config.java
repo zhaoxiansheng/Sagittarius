@@ -1,8 +1,10 @@
 package com.example.zy.sagittarius.bean;
 
 /**
- * Created by zhaoy on 2017/9/10.
+ * Created on 2017/9/10.
  * wx配置
+ *
+ * @author zhaoy
  */
 
 public class Config {

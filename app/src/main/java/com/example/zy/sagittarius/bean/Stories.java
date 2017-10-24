@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by zhaoy on 2017/9/23.
  * 最新消息的列表
+ *
+ * @author zhaoy
  */
 
 public class Stories {

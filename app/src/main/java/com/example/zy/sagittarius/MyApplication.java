@@ -14,8 +14,10 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
 /**
- * Created by ZY on 2017/6/24.
+ * Created on 2017/6/24.
  * application
+ *
+ * @author zhaoy
  */
 
 public class MyApplication extends Application {
@@ -46,15 +48,17 @@ public class MyApplication extends Application {
 
     /**
      * 检查版本
+     *
      * @param versionName 当前版本
      */
-    private void checkVersion(final String versionName){
+    private void checkVersion(final String versionName) {
         version = new VersionModel();
         version.checkVersion(versionName);
     }
 
     /**
      * 获取版本号和版本名
+     *
      * @return 当前应用的版本号
      */
     public PackageInfo getVersion() {

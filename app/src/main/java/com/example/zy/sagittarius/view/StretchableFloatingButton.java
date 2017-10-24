@@ -18,8 +18,9 @@ import android.widget.TextView;
 import com.example.zy.sagittarius.R;
 
 /**
- * Created by ZY on 2017/8/31.
+ * Created on 2017/8/31.
  * 自定义可折叠按钮
+ * @author zhaoy
  */
 
 public class StretchableFloatingButton extends ViewGroup {
@@ -31,51 +32,87 @@ public class StretchableFloatingButton extends ViewGroup {
     private int height;
     private int widthMode;
     private int heightMode;
-    //开始圆的画笔
+    /**
+     * 开始圆的画笔
+     */
     private Paint mPaint;
-    //中间矩形
+    /**
+     * 中间矩形
+     */
     private RectF middleRect;
-    //开始圆的配置
+    /**
+     * 开始圆的配置
+     */
     private int startCircleRadius;
     private Point startCenter;
-    //结束圆的配置
+    /**
+     * 结束圆的配置
+     */
     private int endCircleRadius;
     private Point endCenter;
-    //小圆的配置
+    /**
+     * 小圆的配置
+     */
     private int smallCircleRadius;
     private Point smallCenter;
-    //圆环之间的宽度
+    /**
+     * 圆环之间的宽度
+     */
     private float y = 20;
-    //矩形和圆环之间的比值
+    /**
+     * 矩形和圆环之间的比值
+     */
     private float y_x;
-    //增加或者减少的标志
+    /**
+     * 增加或者减少的标志
+     */
     private boolean isIncrease = true;
 
     private TextView tvContent;
     private View child;
     private int tvWidth;
     private int tvHeight;
-    //文本可以伸缩的长度
+    /**
+     * 文本可以伸缩的长度
+     */
     private int tx;
     private float tx_x;
 
-    //控件背景颜色
+    /**
+     * 控件背景颜色
+     */
     private int bgColor;
-    //内圈小圆颜色
+    /**
+     * 内圈小圆颜色
+     */
     private int innerCircleColor;
-    //字体颜色
+    /**
+     * 字体颜色
+     */
     private int textColor;
-    //文字
+    /**
+     * 文字
+     */
     private String text;
-    //字体大小
+    /**
+     * 字体大小
+     */
     private float textSize;
-    //速度增减
+    /**
+     * 速度增减
+     */
     private float speed;
-    //旋转角度
+    /**
+     * 旋转角度
+     */
     private float degrees;
-    //旋转比
+    /**
+     * 旋转比
+     */
     private float d_x;
-    //是否为点击区域
+    /**
+     * 是否为点击区域
+     */
     private boolean canClick;
 
     private FoldListener foldListener;
@@ -86,7 +123,8 @@ public class StretchableFloatingButton extends ViewGroup {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-                case IS_SLIDE_DECREASE://递减状态
+                //递减状态
+                case IS_SLIDE_DECREASE:
                     endCenter.x -= 30;
                     if (endCenter.x >= startCenter.x + 30) {
                         y = y_x * endCenter.x;
@@ -101,7 +139,8 @@ public class StretchableFloatingButton extends ViewGroup {
                         setEnabled(true);
                     }
                     break;
-                case IS_SLIDE_INCREASE://递增状态
+                //递增状态
+                case IS_SLIDE_INCREASE:
                     endCenter.x += 30;
                     if (endCenter.x < width - endCircleRadius) {
                         mHandler.sendEmptyMessageDelayed(IS_SLIDE_INCREASE, 1);
@@ -176,17 +215,17 @@ public class StretchableFloatingButton extends ViewGroup {
             widthMode = MeasureSpec.getMode(widthMeasureSpec);
             heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-            if (widthMode == MeasureSpec.AT_MOST){
+            if (widthMode == MeasureSpec.AT_MOST) {
                 width = 600;
-            } else if (widthMode == MeasureSpec.EXACTLY){
+            } else if (widthMode == MeasureSpec.EXACTLY) {
                 width = MeasureSpec.getSize(widthMeasureSpec);
             } else {
                 width = MeasureSpec.getSize(widthMeasureSpec);
             }
 
-            if (heightMode == MeasureSpec.AT_MOST){
+            if (heightMode == MeasureSpec.AT_MOST) {
                 height = 100;
-            } else if (heightMode == MeasureSpec.EXACTLY){
+            } else if (heightMode == MeasureSpec.EXACTLY) {
                 height = MeasureSpec.getSize(heightMeasureSpec);
             } else {
                 height = MeasureSpec.getSize(heightMeasureSpec);
@@ -228,14 +267,18 @@ public class StretchableFloatingButton extends ViewGroup {
         super.dispatchDraw(canvas);
     }
 
-    //增加
+    /**
+     * 增加
+     */
     private void startIncrease() {
         setEnabled(false);
         isIncrease = true;
         mHandler.sendEmptyMessageDelayed(IS_SLIDE_INCREASE, 40);
     }
 
-    //减小
+    /**
+     * 减小
+     */
     private void startDecrease() {
         setEnabled(false);
         isIncrease = false;
@@ -264,26 +307,26 @@ public class StretchableFloatingButton extends ViewGroup {
                     foldListener.onFold(isIncrease, sfb);
                 }
                 break;
+            default:
+                break;
         }
         return true;
     }
 
     private boolean judgeCanClick(float x, float y) {
-        boolean click;
         if (isIncrease) {
             if (x < width && y < height) {
-                click = true;
+                return true;
             } else {
-                click = false;
+                return false;
             }
         } else {
             if (x < startCenter.x * 2 && y < startCenter.y * 2) {
-                click = true;
+                return true;
             } else {
-                click = false;
+                return false;
             }
         }
-        return click;
     }
 
     public void setFoldListener(FoldListener foldListener) {
@@ -291,6 +334,11 @@ public class StretchableFloatingButton extends ViewGroup {
     }
 
     public interface FoldListener {
+        /**
+         * 监听控件的点击事件，继而增加或者减少
+         * @param isIncrease 增加减少的flag
+         * @param sfb 控件参数
+         */
         void onFold(boolean isIncrease, StretchableFloatingButton sfb);
     }
 }

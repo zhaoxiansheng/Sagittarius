@@ -3,7 +3,7 @@ package com.example.zy.sagittarius.model;
 import android.widget.Toast;
 
 import com.example.zy.sagittarius.MyApplication;
-import com.example.zy.sagittarius.net.MyObserver;
+import com.example.zy.sagittarius.net.BaseObserver;
 import com.example.zy.sagittarius.net.RetrofitFactory;
 
 import io.reactivex.Observable;
@@ -46,7 +46,7 @@ public class VersionModel implements IVersion{
     @Override
     public void checkVersion(final String versionName) {
         Observable<VersionModel> observable = MyApplication.zhiHuApi.checkVersion(versionName);
-        RetrofitFactory.doHttpRequest(observable, new MyObserver<VersionModel>(MyApplication.context, false) {
+        RetrofitFactory.doHttpRequest(observable, new BaseObserver<VersionModel>(MyApplication.context, false) {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -54,7 +54,7 @@ public class VersionModel implements IVersion{
 
             @Override
             protected void onSuccess(VersionModel versionModel) {
-                if (versionModel.getStatus().equals("0")){
+                if ("0".equals(versionModel.getStatus())){
                     Toast.makeText(MyApplication.context, "当前为最新版:" + versionModel.getLatest(),
                             Toast.LENGTH_SHORT).show();
                 } else {

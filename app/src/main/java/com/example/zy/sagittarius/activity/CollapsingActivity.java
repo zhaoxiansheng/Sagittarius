@@ -5,15 +5,10 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.adapter.HomeAdapter;
@@ -22,11 +17,12 @@ import com.example.zy.sagittarius.model.Themes;
 import com.example.zy.sagittarius.presenter.HomePresenter;
 import com.example.zy.sagittarius.presenter.IHomePresenter;
 
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
+/**
+ * Created on 2017/10/10.
+ * 主页另一种形式的布局
+ *
+ * @author zhaoy
+ */
 public class CollapsingActivity extends AppCompatActivity implements IHomeView {
 
     private RecyclerView rcvHomeCollapsing;
@@ -38,7 +34,7 @@ public class CollapsingActivity extends AppCompatActivity implements IHomeView {
         initData();
     }
 
-    private void initData(){
+    private void initData() {
         rcvHomeCollapsing = (RecyclerView) findViewById(R.id.rcv_home_collapsing);
         IHomePresenter homePresenter = new HomePresenter(this, this);
         homePresenter.getLatest();

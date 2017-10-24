@@ -3,8 +3,10 @@ package com.example.zy.sagittarius.bean;
 import java.util.ArrayList;
 
 /**
- * Created by zhaoy on 2017/9/23.
+ * Created on 2017/9/23.
  * 最新消息
+ *
+ * @author zhaoy
  */
 
 public class Latest {

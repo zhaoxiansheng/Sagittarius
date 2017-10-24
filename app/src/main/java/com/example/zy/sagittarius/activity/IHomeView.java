@@ -4,10 +4,23 @@ import com.example.zy.sagittarius.bean.Latest;
 import com.example.zy.sagittarius.model.Themes;
 
 /**
- * Created by zhaoy on 2017/9/24.
+ * Created on 2017/9/24.
+ *
+ * @author zhaoy
  */
 
 public interface IHomeView {
+    /**
+     * topic list
+     *
+     * @param themes themes
+     */
     void getTopicList(Themes themes);
+
+    /**
+     * latest list
+     *
+     * @param latest latest
+     */
     void getLatestList(Latest latest);
 }

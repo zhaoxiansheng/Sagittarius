@@ -16,8 +16,10 @@ import com.example.zy.sagittarius.presenter.WelComePresenter;
 import java.util.Timer;
 
 /**
- * Created by ZY on 2017/6/23.
+ * Created on 2017/6/23.
  * 欢迎界面
+ *
+ * @author zhaoy`
  */
 
 public class WelComeActivity extends AppCompatActivity
@@ -59,6 +61,8 @@ public class WelComeActivity extends AppCompatActivity
                     LoginActivity.activityIntent(WelComeActivity.this);
                     finish();
                 }
+                break;
+            default:
                 break;
         }
     }

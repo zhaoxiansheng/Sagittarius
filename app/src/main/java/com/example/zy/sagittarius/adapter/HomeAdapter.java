@@ -8,18 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.bean.Latest;
 import com.example.zy.sagittarius.bean.Stories;
-import com.example.zy.sagittarius.model.Themes;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
- * Created by zhaoy on 2017/9/19.
+ * Created on 2017/9/19.
  * 主界面HomeActivity的Adapter
+ *
+ * @author zhaoy
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextViewHolder> {
@@ -43,8 +40,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextView
     public void onBindViewHolder(NormalTextViewHolder holder, int position) {
         Stories stories = latest.getStories().get(position);
         holder.textStoriesTitle.setText(stories.getTitle());
-        Glide.with(context).asBitmap().load(stories.getImages())
-                .into(holder.imgStoriesImages);
+//        Glide.with(context).asBitmap().load(stories.getImages())
+//                .into(holder.imgStoriesImages);
     }
 
     @Override
@@ -52,7 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextView
         return latest.getStories().size() > 0 ? latest.getStories().size() : 0;
     }
 
-    public static class NormalTextViewHolder extends RecyclerView.ViewHolder{
+    public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
         TextView textStoriesTitle;
         ImageView imgStoriesImages;
 

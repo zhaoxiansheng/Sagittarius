@@ -1,9 +1,5 @@
 package com.example.zy.sagittarius.utils;
 
-/**
- * Created zhaoy on 2017/7/3.
- */
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -23,9 +19,11 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
+ * Created  on 2017/7/3.
  * 自定义系统的Crash捕捉类，用Toast替换系统的对话框
  * 将软件版本信息，设备信息，出错信息保存在sd卡中，你可以上传到服务器中
  *
@@ -69,7 +67,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
         //提示用户程序即将退出
         showToast(mContext, "很抱歉，程序遭遇异常，即将退出！");
         try {
-            thread.sleep(2000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -176,9 +174,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
      * 将毫秒数转换成yyyy-MM-dd-HH-mm-ss的格式
      */
     private String paserTime(long milliseconds) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String times = format.format(new Date(milliseconds));
-
-        return times;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
+        return format.format(new Date(milliseconds));
     }
 }

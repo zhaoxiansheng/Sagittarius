@@ -9,8 +9,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 /**
- * Created by zhaoy on 2017/9/19.
+ * Created on 2017/9/19.
  * 知乎api
+ *
+ * @author zhaoy
  */
 
 public interface ZhiHuApi {
@@ -19,18 +21,26 @@ public interface ZhiHuApi {
 
     /**
      * 版本查询
+     *
      * @param versionCode 版本号
+     * @return 版本信息
      */
     @GET("version/android/{versionCode}")
     Observable<VersionModel> checkVersion(@Path("versionCode") String versionCode);
 
     /**
      * 主题查询
+     *
      * @return 主题对象
      */
     @GET("themes")
     Observable<Themes> getTopicList();
 
+    /**
+     * Latest列表的获取
+     *
+     * @return latest列表
+     */
     @GET("news/latest")
     Observable<Latest> getLatestList();
 }

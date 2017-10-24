@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.zy.sagittarius.net.HttpControl;
 import com.example.zy.sagittarius.activity.IWelComeView;
-import com.example.zy.sagittarius.net.RetrofitFactory;
+import com.example.zy.sagittarius.net.HttpControl;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -17,8 +16,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
+ * Created on 2017/6/23.
+ *
  * @author zhaoy
- *         Created ZY on 2017/6/23.
  */
 
 public class WelComePresenter implements IWelComePresenter {

@@ -19,8 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
- * Created by zhaoy on 2017/9/21.
+ * Created on 2017/9/21.
  * retrofit单例
+ *
+ * @author zhaoy
  */
 
 public class RetrofitFactory {
@@ -28,6 +30,7 @@ public class RetrofitFactory {
     private static final long TIMEOUT = 30;
 
     private static OkHttpClient httpClient = new OkHttpClient.Builder()
+            .addInterceptor(new NetworkInterceptor())
             .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
@@ -40,7 +43,8 @@ public class RetrofitFactory {
                 public void log(String message) {
                     Logger.d(message);
                 }
-            })).connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            }))
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .build();
@@ -54,15 +58,15 @@ public class RetrofitFactory {
             .build()
             .create(ZhiHuApi.class);
 
-    public static ZhiHuApi getRetrofitGsonService(){
+    public static ZhiHuApi getRetrofitGsonService() {
         return retrofitGsonService;
     }
 
-    public static <T> void doHttpRequest(Observable<T> pObservable, MyObserver<T> myObserver){
+    public static <T> void doHttpRequest(Observable<T> pObservable, BaseObserver<T> baseObserver) {
         Observable<T> observable = pObservable
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(myObserver);
+        observable.subscribe(baseObserver);
     }
 }

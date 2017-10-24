@@ -1,19 +1,15 @@
 package com.example.zy.sagittarius.net;
 
-import com.example.zy.sagittarius.bean.HttpConstants;
-
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created ZY on 2017/6/23.
+ * Created on 2017/6/23.
+ *
+ * @author zhaoy
  */
 
 public class HttpControl {

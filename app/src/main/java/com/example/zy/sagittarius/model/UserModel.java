@@ -1,8 +1,10 @@
 package com.example.zy.sagittarius.model;
 
 /**
- * Created by ZY on 2017/6/11.
+ * Created on 2017/6/11.
  * user实体类
+ *
+ * @author zhaoy
  */
 
 public class UserModel implements IUser {
@@ -26,10 +28,10 @@ public class UserModel implements IUser {
     }
 
     @Override
-    public int checkUserValidity(String name, String passwd){
-        if (name==null && passwd==null){
+    public int checkUserValidity(String name, String passwd) {
+        if (name == null && passwd == null) {
             return -1;
-        } else if (passwd.equals(getPasswd()) && name.equals(getName())){
+        } else if (passwd.equals(getPasswd()) && name.equals(getName())) {
             return 0;
         } else {
             return -2;

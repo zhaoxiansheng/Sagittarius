@@ -1,30 +1,64 @@
 package com.example.zy.sagittarius.utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.view.WindowManager;
+
+import com.example.zy.sagittarius.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created zhaoy on 2017/7/27.
+ * Created on 2017/7/27.
+ *
+ * @author zhaoy
  */
 
 public class NetworkUtils {
+
+    private static AlertDialog mWifiDialog;
+
+    public static void showWifiDlg(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
+        if (mWifiDialog == null) {
+            mWifiDialog = builder.setIcon(R.mipmap.ic_launcher)
+                    .setTitle("请检查网络")
+                    .setMessage("当前无网络连接").setPositiveButton("退出", new DialogInterface
+                            .OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    }).setNegativeButton("知道了", null).create();
+            // 设置为系统的Dialog，这样使用Application的时候不会 报错
+            mWifiDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            mWifiDialog.setCancelable(false);
+        }
+        mWifiDialog.show();
+    }
 
     private NetworkUtils() {
         throw new UnsupportedOperationException("u can't instance me...");
     }
 
-    public static final int NETWORK_WIFI = 1;    // wifi network
-    public static final int NETWORK_4G = 4;    // "4G" networks
-    public static final int NETWORK_3G = 3;    // "3G" networks
-    public static final int NETWORK_2G = 2;    // "2G" networks
-    public static final int NETWORK_UNKNOWN = 5;    // unknown network
-    public static final int NETWORK_NO = -1;   // no network
+    // wifi network
+    public static final int NETWORK_WIFI = 1;
+    // "4G" networks
+    public static final int NETWORK_4G = 4;
+    // "3G" networks
+    public static final int NETWORK_3G = 3;
+    // "2G" networks
+    public static final int NETWORK_2G = 2;
+    // unknown network
+    public static final int NETWORK_UNKNOWN = 5;
+    // no network
+    public static final int NETWORK_NO = -1;
 
     private static final int NETWORK_TYPE_GSM = 16;
     private static final int NETWORK_TYPE_TD_SCDMA = 17;

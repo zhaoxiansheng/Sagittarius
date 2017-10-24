@@ -6,8 +6,10 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 
 /**
- * Created by zhaoy on 2017/9/13.
+ * Created on 2017/9/13.
  * 读取Linux底层获取mac地址
+ *
+ * @author zhaoy
  */
 
 public class MacUtils {

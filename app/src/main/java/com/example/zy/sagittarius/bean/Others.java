@@ -1,8 +1,10 @@
 package com.example.zy.sagittarius.bean;
 
 /**
- * Created by zhaoy on 2017/9/19.
+ * Created on 2017/9/19.
  * 其他条目
+ *
+ * @author zhaoy
  */
 
 public class Others {

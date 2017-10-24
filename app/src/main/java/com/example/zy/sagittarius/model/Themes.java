@@ -6,8 +6,10 @@ import com.example.zy.sagittarius.bean.Subscribed;
 import java.util.ArrayList;
 
 /**
- * Created by zhaoy on 2017/9/19.
+ * Created on 2017/9/19.
  * 主题日报列表查询
+ *
+ * @author zhaoy
  */
 
 public class Themes {
