@@ -24,7 +24,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 #指定压缩级别
--optimizationpasses 5
+-optimizationpasses 7
 
 #不跳过非公共的库的类成员
 -dontskipnonpubliclibraryclassmembers
@@ -130,9 +130,10 @@
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
+    **[] $VALUES;
+    public *;
 }
 
 # OkHttp

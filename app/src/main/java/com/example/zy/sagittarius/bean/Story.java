@@ -2,14 +2,7 @@ package com.example.zy.sagittarius.bean;
 
 import java.util.List;
 
-/**
- * Created on 2017/9/23.
- * 最新消息
- *
- * @author zhaoy
- */
-
-public class Latest {
+public class Story {
 
     /**
      * date : 20180415

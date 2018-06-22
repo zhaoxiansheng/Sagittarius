@@ -1,15 +1,17 @@
 package com.example.zy.sagittarius.activity;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.zy.sagittarius.R;
+import com.example.zy.sagittarius.glideutils.GlideApp;
 import com.example.zy.sagittarius.presenter.IWelComePresenter;
 import com.example.zy.sagittarius.presenter.WelComePresenter;
 
@@ -22,7 +24,7 @@ import java.util.Timer;
  * @author zhaoy`
  */
 
-public class WelComeActivity extends AppCompatActivity
+public class WelComeActivity extends Activity
         implements IWelComeView, View.OnClickListener {
 
     private ImageView welcomeImg;
@@ -37,8 +39,8 @@ public class WelComeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        welcomeImg = (ImageView) findViewById(R.id.welcome_img);
-        timerText = (TextView) findViewById(R.id.timer_text);
+        welcomeImg =  findViewById(R.id.welcome_img);
+        timerText =  findViewById(R.id.timer_text);
         timerText.setOnClickListener(this);
         welComePresenter = new WelComePresenter(this, this);
         welComePresenter.getBingImg();
@@ -73,7 +75,13 @@ public class WelComeActivity extends AppCompatActivity
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Glide.with(getApplicationContext()).load(bingPic).into(welcomeImg);
+                    GlideApp.with(getApplicationContext())
+                            .load(bingPic)
+                            .centerCrop()
+                            .dontAnimate()
+                            .dontTransform()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .into(welcomeImg);
                 }
             });
         }

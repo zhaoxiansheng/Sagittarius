@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -30,12 +31,12 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.adapter.HomeAdapter;
 import com.example.zy.sagittarius.bean.Latest;
 import com.example.zy.sagittarius.bean.Others;
+import com.example.zy.sagittarius.glideutils.GlideApp;
 import com.example.zy.sagittarius.model.Themes;
 import com.example.zy.sagittarius.presenter.HomePresenter;
 import com.example.zy.sagittarius.presenter.IHomePresenter;
@@ -48,6 +49,8 @@ import java.util.ArrayList;
  */
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IHomeView {
+
+    private Latest latest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +70,6 @@ public class HomeActivity extends AppCompatActivity
      * drawerLayout
      */
     private DrawerLayout mDrawerLayout;
-    /**
-     * 自定义可滑动按钮
-     */
-    private StretchableFloatingButton sFBtn;
     /**
      * 主界面最外层布局
      */
@@ -96,20 +95,20 @@ public class HomeActivity extends AppCompatActivity
     private void init() {
         homePresenter = new HomePresenter(this, this);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setNavigationIcon(R.drawable.menu);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(R.mipmap.menu);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDefaultDisplayHomeAsUpEnabled(true);
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle("哆啦A梦");
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
         headerView = mNavigationView.getHeaderView(0);
-        textUserName = (TextView) headerView.findViewById(R.id.text_user_name);
-        textUserDesc = (TextView) headerView.findViewById(R.id.text_user_description);
+        textUserName = headerView.findViewById(R.id.text_user_name);
+        textUserDesc = headerView.findViewById(R.id.text_user_description);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,12 +124,12 @@ public class HomeActivity extends AppCompatActivity
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
+            public void onDrawerOpened(@NonNull View drawerView) {
 
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {
+            public void onDrawerClosed(@NonNull View drawerView) {
 
             }
 
@@ -141,17 +140,9 @@ public class HomeActivity extends AppCompatActivity
         };
         mDrawerLayout.addDrawerListener(drawerListener);
 
-        clContent = (CoordinatorLayout) findViewById(R.id.cl_content);
+        clContent = findViewById(R.id.cl_content);
 
-        sFBtn = (StretchableFloatingButton) findViewById(R.id.view_stretchable_floating_button);
-        sFBtn.setFoldListener(new StretchableFloatingButton.FoldListener() {
-            @Override
-            public void onFold(boolean isIncrease, StretchableFloatingButton sfb) {
-                sFBtn.startScroll();
-            }
-        });
-
-        recyclerViewHome = (RecyclerView) findViewById(R.id.rcv_home);
+        recyclerViewHome = findViewById(R.id.rcv_home);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -189,20 +180,19 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
         String name = others.get(id - 1).getName();
 
-        Glide.with(this)
+        GlideApp.with(this)
                 .asBitmap()
                 .load(others.get(id - 1).getThumbnail())
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap resource, com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(),resource);
+                    public void onResourceReady(@NonNull Bitmap resource, @NonNull com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        BitmapDrawable drawable = new BitmapDrawable(getResources(), resource);
                         mNavigationView.getHeaderView(0).setBackground(drawable);
                     }
                 });
         if (id == 1) {
             Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
         } else if (id == 2) {
-            CollapsingActivity.activityIntent(HomeActivity.this);
             Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
         } else if (id == 3) {
             Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
@@ -256,12 +246,12 @@ public class HomeActivity extends AppCompatActivity
             mNavigationView.getMenu().add(1, i, i, o.getName());
         }
 
-        Glide.with(HomeActivity.this)
+        GlideApp.with(HomeActivity.this)
                 .asBitmap()
                 .load(others.get(0).getThumbnail())
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap resource, com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                         Drawable drawable = new BitmapDrawable(resource);
                         headerView.setBackground(drawable);
                     }

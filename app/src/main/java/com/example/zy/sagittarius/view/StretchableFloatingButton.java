@@ -2,6 +2,8 @@ package com.example.zy.sagittarius.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,9 +19,12 @@ import android.widget.TextView;
 
 import com.example.zy.sagittarius.R;
 
+import java.io.File;
+
 /**
  * Created on 2017/8/31.
  * 自定义可折叠按钮
+ *
  * @author zhaoy
  */
 
@@ -336,8 +341,9 @@ public class StretchableFloatingButton extends ViewGroup {
     public interface FoldListener {
         /**
          * 监听控件的点击事件，继而增加或者减少
+         *
          * @param isIncrease 增加减少的flag
-         * @param sfb 控件参数
+         * @param sfb        控件参数
          */
         void onFold(boolean isIncrease, StretchableFloatingButton sfb);
     }

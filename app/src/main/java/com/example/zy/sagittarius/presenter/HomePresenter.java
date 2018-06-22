@@ -35,11 +35,6 @@ public class HomePresenter implements IHomePresenter {
             protected void onSuccess(Themes themes) {
                 iHomeView.getTopicList(themes);
             }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-            }
         });
     }
 
@@ -50,11 +45,6 @@ public class HomePresenter implements IHomePresenter {
             @Override
             protected void onSuccess(Latest latest) {
                 iHomeView.getLatestList(latest);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
             }
         });
     }

@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.bean.Latest;
-import com.example.zy.sagittarius.bean.Stories;
+import com.example.zy.sagittarius.glideutils.GlideApp;
 
 /**
  * Created on 2017/9/19.
@@ -33,20 +34,32 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextView
 
     @Override
     public NormalTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.adapter_home, parent, false));
+        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.adapter_home, null));
     }
 
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, int position) {
-        Stories stories = latest.getStories().get(position);
+        Latest.StoriesBean stories = latest.getStories().get(position);
         holder.textStoriesTitle.setText(stories.getTitle());
-//        Glide.with(context).asBitmap().load(stories.getImages())
-//                .into(holder.imgStoriesImages);
+
+        GlideApp.with(context)
+                .asBitmap()
+                .centerCrop()
+                .dontAnimate()
+                .dontTransform()
+                .fallback(R.mipmap.th)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .load(stories.getImages().get(0))
+                .into(holder.imgStoriesImages);
     }
 
     @Override
     public int getItemCount() {
-        return latest.getStories().size() > 0 ? latest.getStories().size() : 0;
+        if (latest != null) {
+            return latest.getStories().size() > 0 ? latest.getStories().size() : 0;
+        } else {
+            return 0;
+        }
     }
 
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
@@ -55,8 +68,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextView
 
         NormalTextViewHolder(View itemView) {
             super(itemView);
-            textStoriesTitle = (TextView) itemView.findViewById(R.id.text_stories_title);
-            imgStoriesImages = (ImageView) itemView.findViewById(R.id.img_stories_images);
+            textStoriesTitle = itemView.findViewById(R.id.text_stories_title);
+            imgStoriesImages = itemView.findViewById(R.id.img_stories_images);
         }
     }
 }

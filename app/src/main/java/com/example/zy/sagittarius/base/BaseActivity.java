@@ -1,4 +1,4 @@
-package com.example.zy.sagittarius.activity;
+package com.example.zy.sagittarius.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
