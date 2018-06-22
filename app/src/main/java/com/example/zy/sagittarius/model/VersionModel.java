@@ -46,7 +46,7 @@ public class VersionModel implements IVersion{
     @Override
     public void checkVersion(final String versionName) {
         Observable<VersionModel> observable = MyApplication.zhiHuApi.checkVersion(versionName);
-        RetrofitFactory.doHttpRequest(observable, new BaseObserver<VersionModel>(MyApplication.context, false) {
+        RetrofitFactory.doHttpRequest(observable, new BaseObserver<VersionModel>(MyApplication.getContext(), false) {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
@@ -55,10 +55,10 @@ public class VersionModel implements IVersion{
             @Override
             protected void onSuccess(VersionModel versionModel) {
                 if ("0".equals(versionModel.getStatus())){
-                    Toast.makeText(MyApplication.context, "当前为最新版:" + versionModel.getLatest(),
+                    Toast.makeText(MyApplication.getContext(), "当前为最新版:" + versionModel.getLatest(),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MyApplication.context, "可以去:" + versionModel.getUrl() +
+                    Toast.makeText(MyApplication.getContext(), "可以去:" + versionModel.getUrl() +
                                     "下载\n这次更新的内容有:" + versionModel.getMsg(), Toast.LENGTH_SHORT).show();
                 }
             }

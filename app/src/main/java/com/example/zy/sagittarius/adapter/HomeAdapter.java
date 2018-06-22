@@ -13,6 +13,9 @@ import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.bean.Latest;
 import com.example.zy.sagittarius.glideutils.GlideApp;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created on 2017/9/19.
  * 主界面HomeActivity的Adapter
@@ -63,13 +66,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.NormalTextView
     }
 
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
-        TextView textStoriesTitle;
+
+        @BindView(R.id.img_stories_images)
         ImageView imgStoriesImages;
+        @BindView(R.id.text_stories_title)
+        TextView textStoriesTitle;
+
 
         NormalTextViewHolder(View itemView) {
             super(itemView);
-            textStoriesTitle = itemView.findViewById(R.id.text_stories_title);
-            imgStoriesImages = itemView.findViewById(R.id.img_stories_images);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

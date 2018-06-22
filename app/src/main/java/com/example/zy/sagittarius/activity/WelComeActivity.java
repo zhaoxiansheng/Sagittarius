@@ -9,13 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.glideutils.GlideApp;
 import com.example.zy.sagittarius.presenter.IWelComePresenter;
 import com.example.zy.sagittarius.presenter.WelComePresenter;
 
 import java.util.Timer;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created on 2017/6/23.
@@ -27,10 +29,12 @@ import java.util.Timer;
 public class WelComeActivity extends Activity
         implements IWelComeView, View.OnClickListener {
 
-    private ImageView welcomeImg;
-    private TextView timerText;
+    @BindView(R.id.welcome_img)
+    ImageView welcomeImg;
+    @BindView(R.id.timer_text)
+    TextView timerText;
     IWelComePresenter welComePresenter;
-    private SharedPreferences sharedPreferences;
+    protected SharedPreferences sharedPreferences;
     private String name;
     private String pass;
 
@@ -38,9 +42,8 @@ public class WelComeActivity extends Activity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ButterKnife.bind(this);
 
-        welcomeImg =  findViewById(R.id.welcome_img);
-        timerText =  findViewById(R.id.timer_text);
         timerText.setOnClickListener(this);
         welComePresenter = new WelComePresenter(this, this);
         welComePresenter.getBingImg();
@@ -72,36 +75,31 @@ public class WelComeActivity extends Activity
     @Override
     public void getBingImage(final String bingPic) {
         if (welcomeImg != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnUiThread(() ->
                     GlideApp.with(getApplicationContext())
                             .load(bingPic)
                             .centerCrop()
                             .dontAnimate()
                             .dontTransform()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .into(welcomeImg);
-                }
-            });
+                            .into(welcomeImg)
+            );
         }
     }
 
     @Override
     public void timerToHome(final int time) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                timerText.setText("跳过(" + time + ")");
-                if (time == 0) {
-                    welComePresenter.cancel();
-                    if (name != null && pass != null) {
-                        HomeActivity.activityIntent(WelComeActivity.this);
-                        finish();
-                    } else {
-                        LoginActivity.activityIntent(WelComeActivity.this);
-                        finish();
-                    }
+        runOnUiThread(() -> {
+            StringBuilder stringBuilder = new StringBuilder("跳过(" + time + ")");
+            timerText.setText(stringBuilder);
+            if (time == 0) {
+                welComePresenter.cancel();
+                if (name != null && pass != null) {
+                    HomeActivity.activityIntent(WelComeActivity.this);
+                    finish();
+                } else {
+                    LoginActivity.activityIntent(WelComeActivity.this);
+                    finish();
                 }
             }
         });

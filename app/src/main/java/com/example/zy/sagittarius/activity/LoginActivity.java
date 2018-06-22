@@ -23,24 +23,37 @@ import com.example.zy.sagittarius.R;
 import com.example.zy.sagittarius.presenter.ILoginPresenter;
 import com.example.zy.sagittarius.presenter.LoginPresenter;
 
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created on 2017/9/19.
  * 登陆界面
  *
  * @author zhaoy
  */
-public class LoginActivity extends AppCompatActivity implements ILoginView, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements ILoginView {
 
-    private EditText editUser;
-    private EditText editPass;
-    private Button btnLogin;
-    private Button btnClear;
+    @BindView(R.id.et_login_username)
+    EditText etLoginUsername;
+    @BindView(R.id.username_wrapper)
+    TextInputLayout usernameWrapper;
+    @BindView(R.id.et_login_password)
+    EditText etLoginPassword;
+    @BindView(R.id.password_wrapper)
+    TextInputLayout passwordWrapper;
+    @BindView(R.id.btn_login_login)
+    Button btnLoginLogin;
+    @BindView(R.id.btn_login_clear)
+    Button btnLoginClear;
+    @BindView(R.id.progress_login)
+    ProgressBar progressLogin;
+
     ILoginPresenter loginPresenter;
-    private ProgressBar progressBar;
-    private TextInputLayout userWrapper;
-    private TextInputLayout passwordWrapper;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,77 +64,48 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
             getWindow().setEnterTransition(explode);
         }
         setContentView(R.layout.activity_login);
-
-        //find view
-        editUser = (EditText) this.findViewById(R.id.et_login_username);
-        editPass = (EditText) this.findViewById(R.id.et_login_password);
-        btnLogin = (Button) this.findViewById(R.id.btn_login_login);
-        btnClear = (Button) this.findViewById(R.id.btn_login_clear);
-        progressBar = (ProgressBar) this.findViewById(R.id.progress_login);
-
-        btnLogin.setOnClickListener(this);
-        btnClear.setOnClickListener(this);
+        ButterKnife.bind(this);
 
         loginPresenter = new LoginPresenter(this);
         loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
 
-        userWrapper = (TextInputLayout) findViewById(R.id.username_wrapper);
-        passwordWrapper = (TextInputLayout) findViewById(R.id.password_wrapper);
-
         sharedPreferences = getSharedPreferences("login", Activity.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
     }
 
     @Override
     public void onHideKeyboard() {
         View view = getCurrentFocus();
         if (view != null) {
-            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+            ((InputMethodManager) Objects.requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(
                     view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_login_clear:
-                loginPresenter.clear();
-                break;
-            case R.id.btn_login_login:
-                loginPresenter.setProgressBarVisiblity(View.VISIBLE);
-                btnLogin.setEnabled(false);
-                btnClear.setEnabled(false);
-                loginPresenter.doLogin(editUser.getText().toString(), editPass.getText().toString());
-                loginPresenter.onHideKeyboard();
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     public void onClearText() {
-        editUser.setText("");
-        editPass.setText("");
+        etLoginUsername.setText("");
+        etLoginPassword.setText("");
     }
 
     @Override
     public void onLoginResult(Boolean result, int code) {
         loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
-        btnLogin.setEnabled(true);
-        btnClear.setEnabled(true);
+        btnLoginLogin.setEnabled(true);
+        btnLoginClear.setEnabled(true);
         if (result) {
-            editor.putString("name", editUser.getText().toString());
-            editor.putString("pass", editUser.getText().toString());
-            editor.commit();
-            userWrapper.setErrorEnabled(false);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("name", etLoginUsername.getText().toString());
+            editor.putString("pass", etLoginPassword.getText().toString());
+            editor.apply();
+            usernameWrapper.setErrorEnabled(false);
             passwordWrapper.setErrorEnabled(false);
             HomeActivity.activityIntent(LoginActivity.this);
             finish();
         } else {
             switch (code) {
                 case -1:
-                    userWrapper.setError("用户名不能为空");
+                    usernameWrapper.setError("用户名不能为空");
                     passwordWrapper.setError("密码不能为空");
                     break;
                 case -2:
@@ -135,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
     @Override
     public void onSetProgressBarVisibility(int visibility) {
-        progressBar.setVisibility(visibility);
+        progressLogin.setVisibility(visibility);
     }
 
     public static void activityIntent(Activity activity) {
@@ -144,6 +128,24 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
             activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
         } else {
             activity.startActivity(intent);
+        }
+    }
+
+    @OnClick({R.id.btn_login_login, R.id.btn_login_clear})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_login_login:
+                loginPresenter.setProgressBarVisiblity(View.VISIBLE);
+                btnLoginLogin.setEnabled(false);
+                btnLoginClear.setEnabled(false);
+                loginPresenter.doLogin(etLoginUsername.getText().toString(), etLoginPassword.getText().toString());
+                loginPresenter.onHideKeyboard();
+                break;
+            case R.id.btn_login_clear:
+                loginPresenter.clear();
+                break;
+            default:
+                break;
         }
     }
 }

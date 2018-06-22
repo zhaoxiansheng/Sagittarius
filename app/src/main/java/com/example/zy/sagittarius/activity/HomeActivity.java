@@ -6,7 +6,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,9 +39,11 @@ import com.example.zy.sagittarius.glideutils.GlideApp;
 import com.example.zy.sagittarius.model.Themes;
 import com.example.zy.sagittarius.presenter.HomePresenter;
 import com.example.zy.sagittarius.presenter.IHomePresenter;
-import com.example.zy.sagittarius.view.StretchableFloatingButton;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author zhaoy
@@ -50,7 +51,14 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IHomeView {
 
-    private Latest latest;
+    @BindView(R.id.rcv_home)
+    RecyclerView rcvHome;
+    @BindView(R.id.cl_content)
+    CoordinatorLayout clContent;
+    @BindView(R.id.nav_view)
+    NavigationView navView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,30 +69,16 @@ public class HomeActivity extends AppCompatActivity
             getWindow().setEnterTransition(explode);
         }
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         init();
         initData();
     }
 
-    /**
-     * drawerLayout
-     */
-    private DrawerLayout mDrawerLayout;
-    /**
-     * 主界面最外层布局
-     */
-    private CoordinatorLayout clContent;
-    /**
-     * 抽屉中布局 NavigationView
-     */
-    private NavigationView mNavigationView;
     private View headerView;
     private TextView textUserName;
     private TextView textUserDesc;
     private ArrayList<Others> others;
-
-    private RecyclerView recyclerViewHome;
-    private HomeAdapter homeAdapter;
 
     private IHomePresenter homePresenter;
 
@@ -99,23 +93,20 @@ public class HomeActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.mipmap.menu);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+        }
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle("哆啦A梦");
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mNavigationView = findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        navView.setNavigationItemSelectedListener(this);
 
-        headerView = mNavigationView.getHeaderView(0);
+        headerView = navView.getHeaderView(0);
         textUserName = headerView.findViewById(R.id.text_user_name);
         textUserDesc = headerView.findViewById(R.id.text_user_description);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.START);
-            }
-        });
+        mToolbar.setNavigationOnClickListener(view ->
+                drawerLayout.openDrawer(Gravity.START)
+        );
 
         DrawerLayout.DrawerListener drawerListener = new DrawerLayout.DrawerListener() {
             @Override
@@ -138,12 +129,12 @@ public class HomeActivity extends AppCompatActivity
 
             }
         };
-        mDrawerLayout.addDrawerListener(drawerListener);
+        drawerLayout.addDrawerListener(drawerListener);
 
         clContent = findViewById(R.id.cl_content);
 
-        recyclerViewHome = findViewById(R.id.rcv_home);
-        recyclerViewHome.setLayoutManager(new LinearLayoutManager(this));
+        rcvHome = findViewById(R.id.rcv_home);
+        rcvHome.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**
@@ -151,8 +142,8 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -185,9 +176,9 @@ public class HomeActivity extends AppCompatActivity
                 .load(others.get(id - 1).getThumbnail())
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @NonNull com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
                         BitmapDrawable drawable = new BitmapDrawable(getResources(), resource);
-                        mNavigationView.getHeaderView(0).setBackground(drawable);
+                        navView.getHeaderView(0).setBackground(drawable);
                     }
                 });
         if (id == 1) {
@@ -216,7 +207,7 @@ public class HomeActivity extends AppCompatActivity
             Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
         }
 
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -243,7 +234,7 @@ public class HomeActivity extends AppCompatActivity
         int i = 0;
         for (Others o : others) {
             i++;
-            mNavigationView.getMenu().add(1, i, i, o.getName());
+            navView.getMenu().add(1, i, i, o.getName());
         }
 
         GlideApp.with(HomeActivity.this)
@@ -252,7 +243,7 @@ public class HomeActivity extends AppCompatActivity
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        Drawable drawable = new BitmapDrawable(resource);
+                        BitmapDrawable drawable = new BitmapDrawable(getResources(), resource);
                         headerView.setBackground(drawable);
                     }
                 });
@@ -260,7 +251,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void getLatestList(Latest latest) {
-        homeAdapter = new HomeAdapter(HomeActivity.this, latest);
-        recyclerViewHome.setAdapter(homeAdapter);
+        HomeAdapter homeAdapter = new HomeAdapter(HomeActivity.this, latest);
+        rcvHome.setAdapter(homeAdapter);
     }
 }
