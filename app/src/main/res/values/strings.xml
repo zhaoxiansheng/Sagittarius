@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MVPTest</string>
+    <string name="app_name">Sagittarius</string>
     <string name="email_hint">邮箱/手机号</string>
     <string name="password_hint">请输入密码</string>
     <string name="login">登录</string>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created on 2017/6/23.
@@ -27,14 +27,14 @@ import butterknife.ButterKnife;
  */
 
 public class WelComeActivity extends Activity
-        implements IWelComeView, View.OnClickListener {
+        implements IWelComeView {
 
+    IWelComePresenter welComePresenter;
+    protected SharedPreferences sharedPreferences;
     @BindView(R.id.welcome_img)
     ImageView welcomeImg;
     @BindView(R.id.timer_text)
     TextView timerText;
-    IWelComePresenter welComePresenter;
-    protected SharedPreferences sharedPreferences;
     private String name;
     private String pass;
 
@@ -44,7 +44,6 @@ public class WelComeActivity extends Activity
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
 
-        timerText.setOnClickListener(this);
         welComePresenter = new WelComePresenter(this, this);
         welComePresenter.getBingImg();
         int timerTime = 3;
@@ -52,24 +51,6 @@ public class WelComeActivity extends Activity
         sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         name = sharedPreferences.getString("name", null);
         pass = sharedPreferences.getString("pass", null);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.timer_text:
-                welComePresenter.cancel();
-                if (name != null && pass != null) {
-                    HomeActivity.activityIntent(WelComeActivity.this);
-                    finish();
-                } else {
-                    LoginActivity.activityIntent(WelComeActivity.this);
-                    finish();
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -90,7 +71,9 @@ public class WelComeActivity extends Activity
     @Override
     public void timerToHome(final int time) {
         runOnUiThread(() -> {
-            StringBuilder stringBuilder = new StringBuilder("跳过(" + time + ")");
+            StringBuilder stringBuilder = new StringBuilder("跳过(");
+            stringBuilder.append(time);
+            stringBuilder.append(")");
             timerText.setText(stringBuilder);
             if (time == 0) {
                 welComePresenter.cancel();
@@ -114,5 +97,17 @@ public class WelComeActivity extends Activity
     protected void onDestroy() {
         super.onDestroy();
         welComePresenter.cancel();
+    }
+
+    @OnClick(R.id.timer_text)
+    public void onViewClicked() {
+        welComePresenter.cancel();
+        if (name != null && pass != null) {
+            HomeActivity.activityIntent(WelComeActivity.this);
+            finish();
+        } else {
+            LoginActivity.activityIntent(WelComeActivity.this);
+            finish();
+        }
     }
 }

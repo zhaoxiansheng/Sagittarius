@@ -2,17 +2,14 @@ package com.example.zy.sagittarius.net;
 
 import com.orhanobut.logger.Logger;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -31,19 +28,18 @@ public class RetrofitFactory {
 
     private static OkHttpClient httpClient = new OkHttpClient.Builder()
             .addInterceptor(new NetworkInterceptor())
-            .addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Request.Builder builder = chain.request().newBuilder();
-                    return chain.proceed(builder.build());
-                }
+            .addInterceptor(chain -> {
+                Request request = chain.request();
+
+                long t1 = System.nanoTime();
+
+                Response response = chain.proceed(request);
+
+                long t2 = System.nanoTime();
+                Logger.d(String.format("Received response for %s in %.1fms%n%s",
+                        response.request().url(), (t2 - t1) / 1e6d, response.body().string()));
+                return response;
             })
-            .addInterceptor(new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                @Override
-                public void log(String message) {
-                    Logger.d(message);
-                }
-            }))
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
