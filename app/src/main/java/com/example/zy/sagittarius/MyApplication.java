@@ -12,10 +12,17 @@ import com.example.zy.sagittarius.model.VersionModel;
 import com.example.zy.sagittarius.net.RetrofitFactory;
 import com.example.zy.sagittarius.net.ZhiHuApi;
 import com.example.zy.sagittarius.utils.CustomCrashHandler;
+import com.example.zy.sagittarius.utils.ThreadPoolUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created on 2017/6/24.
@@ -27,7 +34,10 @@ import java.lang.ref.WeakReference;
 public class MyApplication extends Application {
 
     private static WeakReference<Context> context;
+
     public static ZhiHuApi zhiHuApi;
+
+    public static ThreadPoolExecutor threadPoolExecutor;
 
     @Override
     public void onCreate() {
@@ -41,8 +51,15 @@ public class MyApplication extends Application {
             }
         });
 
+        int corePoolSize = Runtime.getRuntime().availableProcessors();
+        LinkedBlockingDeque<Runnable> workQueue = new LinkedBlockingDeque<>();
+        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        RejectedExecutionHandler handler = new ThreadPoolExecutor.AbortPolicy();
+        threadPoolExecutor = ThreadPoolUtils.getInstance(corePoolSize, 2 * corePoolSize + 1, 30,
+                TimeUnit.SECONDS, workQueue, threadFactory, handler);
+
         CustomCrashHandler mCustomCrashHandler = CustomCrashHandler.getInstance();
-        mCustomCrashHandler.setCustomCrashHanler(getApplicationContext());
+        mCustomCrashHandler.setCustomCrashHandler(getContext());
 
         zhiHuApi = RetrofitFactory.getRetrofitGsonService();
         PackageInfo packageInfo = getVersion();
@@ -73,8 +90,7 @@ public class MyApplication extends Application {
     public PackageInfo getVersion() {
         try {
             PackageManager manager = this.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            return info;
+            return manager.getPackageInfo(this.getPackageName(), 0);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -82,7 +98,7 @@ public class MyApplication extends Application {
     }
 
     // TODO: 2018/6/22 封装数据统计 
-    private static class MyActivityLifecycle implements ActivityLifecycleCallbacks{
+    private static class MyActivityLifecycle implements ActivityLifecycleCallbacks {
         @Override
         public void onActivityCreated(Activity activity, Bundle bundle) {
 

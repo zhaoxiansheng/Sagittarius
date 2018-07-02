@@ -2,6 +2,7 @@ package com.example.zy.sagittarius.net;
 
 import com.orhanobut.logger.Logger;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -10,6 +11,9 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -36,8 +40,27 @@ public class RetrofitFactory {
                 Response response = chain.proceed(request);
 
                 long t2 = System.nanoTime();
-                Logger.d(String.format("Received response for %s in %.1fms%n%s",
-                        response.request().url(), (t2 - t1) / 1e6d, response.body().string()));
+
+                ResponseBody responseBody = response.body();
+                BufferedSource source = null;
+                if (responseBody != null) {
+                    source = responseBody.source();
+                    source.request(Long.MAX_VALUE);
+                }
+                Buffer buffer = null;
+                if (source != null) {
+                    buffer = source.buffer();
+                }
+
+                String responseBodyString = null;
+                if (buffer != null) {
+                    responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
+                }
+
+
+                Logger.d("url:" + response.request().url()
+                        + "\ntime:" + (t2 - t1) / 1e6d
+                        + "ms\nbody:" + responseBodyString);
                 return response;
             })
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)

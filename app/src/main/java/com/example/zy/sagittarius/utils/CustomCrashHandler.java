@@ -10,12 +10,15 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.zy.sagittarius.MyApplication;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +45,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
     /**
      * 私有化静态当前对象，
      */
-    private static CustomCrashHandler mInstance = new CustomCrashHandler();
+    private static WeakReference<CustomCrashHandler> mInstance;
 
     private CustomCrashHandler() {
     }
@@ -53,7 +56,14 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
      * @return 返回Custom实例
      */
     public static CustomCrashHandler getInstance() {
-        return mInstance;
+        if (mInstance == null){
+            synchronized (CustomCrashHandler.class){
+                if (mInstance == null){
+                    mInstance = new WeakReference<>(new CustomCrashHandler());
+                }
+            }
+        }
+        return mInstance.get();
     }
 
     /**
@@ -62,10 +72,10 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         //将一些信息保存到SDcard中
-        savaInfoToSD(mContext, ex);
+        saveInfoToSD(mContext, ex);
 
         //提示用户程序即将退出
-        showToast(mContext, "很抱歉，程序遭遇异常，即将退出！");
+        showToast(mContext);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -78,7 +88,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
     /**
      * 为我们的应用程序设置自定义Crash处理
      */
-    public void setCustomCrashHanler(Context context) {
+    public void setCustomCrashHandler(Context context) {
         mContext = context;
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -86,16 +96,12 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
     /**
      * 显示提示信息，需要在线程中显示Toast
      */
-    private void showToast(final Context context, final String msg) {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                Looper.prepare();
-                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
-        }).start();
+    private void showToast(final Context context) {
+        MyApplication.threadPoolExecutor.execute(() -> {
+            Looper.prepare();
+            Toast.makeText(context, "很抱歉，程序遭遇异常，即将退出！", Toast.LENGTH_LONG).show();
+            Looper.loop();
+        });
     }
 
     /**
@@ -112,12 +118,14 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
             e.printStackTrace();
         }
 
-        map.put("versionName", mPackageInfo.versionName);
-        map.put("versionCode", "" + mPackageInfo.versionCode);
+        if (mPackageInfo != null) {
+            map.put("versionName", mPackageInfo.versionName);
+            map.put("versionCode", "" + mPackageInfo.versionCode);
 
-        map.put("MODEL", "" + Build.MODEL);
-        map.put("SDK_INT", "" + Build.VERSION.SDK_INT);
-        map.put("PRODUCT", "" + Build.PRODUCT);
+            map.put("MODEL", "" + Build.MODEL);
+            map.put("SDK_INT", "" + Build.VERSION.SDK_INT);
+            map.put("PRODUCT", "" + Build.PRODUCT);
+        }
 
         return map;
     }
@@ -137,10 +145,13 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
 
     /**
      * 保存获取的 软件信息，设备信息和出错信息保存在SDcard中
+     * @param context 上下文
+     * @param ex 异常
+     * @return 文件名字
      */
-    private String savaInfoToSD(Context context, Throwable ex) {
+    private String saveInfoToSD(Context context, Throwable ex) {
         String fileName = null;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         for (Map.Entry<String, String> entry : obtainSimpleInfo(context).entrySet()) {
             String key = entry.getKey();
@@ -157,7 +168,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
             }
 
             try {
-                fileName = dir.toString() + File.separator + paserTime(System.currentTimeMillis()) + ".log";
+                fileName = dir.toString() + File.separator + parseTime(System.currentTimeMillis()) + ".log";
                 FileOutputStream fos = new FileOutputStream(fileName);
                 fos.write(sb.toString().getBytes());
                 fos.flush();
@@ -173,7 +184,7 @@ public final class CustomCrashHandler implements UncaughtExceptionHandler {
     /**
      * 将毫秒数转换成yyyy-MM-dd-HH-mm-ss的格式
      */
-    private String paserTime(long milliseconds) {
+    private String parseTime(long milliseconds) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
         return format.format(new Date(milliseconds));
     }
