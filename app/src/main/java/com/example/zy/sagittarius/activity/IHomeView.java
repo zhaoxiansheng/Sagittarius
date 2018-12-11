@@ -10,17 +10,4 @@ import com.example.zy.sagittarius.model.Themes;
  */
 
 public interface IHomeView {
-    /**
-     * topic list
-     *
-     * @param themes themes
-     */
-    void getTopicList(Themes themes);
-
-    /**
-     * latest list
-     *
-     * @param latest latest
-     */
-    void getLatestList(Latest latest);
 }

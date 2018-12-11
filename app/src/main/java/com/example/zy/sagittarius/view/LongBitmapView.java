@@ -92,6 +92,10 @@ public class LongBitmapView extends View {
                 int moveX = curX - downX;
                 int moveY = curY - downY;
 
+                onMove(moveX, moveY);
+
+                downX = curX;
+                downY = curY;
                 break;
             case MotionEvent.ACTION_UP:
                 break;
@@ -101,7 +105,7 @@ public class LongBitmapView extends View {
         return true;
     }
 
-    private void moMove(int moveX, int moveY) {
+    private void onMove(int moveX, int moveY) {
         if (mImageWidth > getWidth()) {
             mRect.offset(-moveX, 0);
             checkWidth();

@@ -2,8 +2,6 @@ package com.example.zy.sagittarius.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.zy.sagittarius.R;
-
-import java.io.File;
 
 /**
  * Created on 2017/8/31.

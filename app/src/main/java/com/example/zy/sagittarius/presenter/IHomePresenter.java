@@ -7,13 +7,4 @@ package com.example.zy.sagittarius.presenter;
  */
 
 public interface IHomePresenter {
-    /**
-     * 获取主题列表接口
-     */
-    void getTopic();
-
-    /**
-     * 获取latest列表接口
-     */
-    void getLatest();
 }

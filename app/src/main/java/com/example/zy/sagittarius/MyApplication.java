@@ -7,8 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.example.zy.sagittarius.model.IVersion;
-import com.example.zy.sagittarius.model.VersionModel;
 import com.example.zy.sagittarius.net.RetrofitFactory;
 import com.example.zy.sagittarius.net.ZhiHuApi;
 import com.example.zy.sagittarius.utils.CustomCrashHandler;
@@ -63,23 +61,12 @@ public class MyApplication extends Application {
 
         zhiHuApi = RetrofitFactory.getRetrofitGsonService();
         PackageInfo packageInfo = getVersion();
-        checkVersion(packageInfo.versionName);
 
         registerActivityLifecycleCallbacks(new MyActivityLifecycle());
     }
 
     public static Context getContext() {
         return context.get();
-    }
-
-    /**
-     * 检查版本
-     *
-     * @param versionName 当前版本
-     */
-    private void checkVersion(final String versionName) {
-        IVersion version = new VersionModel();
-        version.checkVersion(versionName);
     }
 
     /**

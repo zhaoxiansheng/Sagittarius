@@ -4,12 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -28,19 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.zy.sagittarius.R;
-import com.example.zy.sagittarius.adapter.HomeAdapter;
-import com.example.zy.sagittarius.bean.Latest;
-import com.example.zy.sagittarius.bean.Others;
-import com.example.zy.sagittarius.glideutils.GlideApp;
-import com.example.zy.sagittarius.model.Themes;
 import com.example.zy.sagittarius.presenter.HomePresenter;
 import com.example.zy.sagittarius.presenter.IHomePresenter;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +66,6 @@ public class HomeActivity extends AppCompatActivity
     private View headerView;
     private TextView textUserName;
     private TextView textUserDesc;
-    private ArrayList<Others> others;
 
     private IHomePresenter homePresenter;
 
@@ -168,45 +155,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        String name = others.get(id - 1).getName();
-
-        GlideApp.with(this)
-                .asBitmap()
-                .load(others.get(id - 1).getThumbnail())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), resource);
-                        navView.getHeaderView(0).setBackground(drawable);
-                    }
-                });
-        if (id == 1) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 2) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 3) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 4) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 5) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 6) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 7) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 8) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 9) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 10) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 11) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        } else if (id == 12) {
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -223,35 +171,5 @@ public class HomeActivity extends AppCompatActivity
     private void initData() {
         textUserName.setText("赵宇");
         textUserDesc.setText("我是一个偶尔想静静的话痨");
-
-        homePresenter.getTopic();
-        homePresenter.getLatest();
-    }
-
-    @Override
-    public void getTopicList(Themes themes) {
-        others = themes.getOthers();
-        int i = 0;
-        for (Others o : others) {
-            i++;
-            navView.getMenu().add(1, i, i, o.getName());
-        }
-
-        GlideApp.with(HomeActivity.this)
-                .asBitmap()
-                .load(others.get(0).getThumbnail())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                        BitmapDrawable drawable = new BitmapDrawable(getResources(), resource);
-                        headerView.setBackground(drawable);
-                    }
-                });
-    }
-
-    @Override
-    public void getLatestList(Latest latest) {
-        HomeAdapter homeAdapter = new HomeAdapter(HomeActivity.this, latest);
-        rcvHome.setAdapter(homeAdapter);
     }
 }
